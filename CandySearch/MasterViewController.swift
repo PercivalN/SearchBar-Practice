@@ -132,6 +132,7 @@ class MasterViewController: UIViewController, UITableViewDataSource, UITableView
 extension MasterViewController: UISearchResultsUpdating {
 	// MARK: - UISearchResultsUpdating Delegate
 	func updateSearchResults(for searchController: UISearchController) {
-		// TODO
+		filterContentForSearchText(searchController.searchBar.text!)
+
 	}
 }
