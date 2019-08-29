@@ -99,6 +99,22 @@ class MasterViewController: UIViewController, UITableViewDataSource, UITableView
 		return cell
 	}
 
+	// MARK: - Private instance methods
+
+	func searchBarIsEmpty() -> Bool {
+		// Returns true if the text is empty or nil
+		return searchController.searchBar.text?.isEmpty ?? true
+	}
+
+	func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+		filteredCandies = candies.filter({( candy : Candy) -> Bool in
+			return candy.name.lowercased().contains(searchText.lowercased())
+		})
+
+		tableView.reloadData()
+	}
+
+
 	// MARK: - Segues
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "showDetail" {
