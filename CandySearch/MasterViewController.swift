@@ -87,17 +87,27 @@ class MasterViewController: UIViewController, UITableViewDataSource, UITableView
 	}
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		if isFiltering() {
+			return filteredCandies.count
+		}
+
 		return candies.count
 	}
 
+
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
-		let candy = candies[indexPath.row]
+		let candy: Candy
+		if isFiltering() {
+			candy = filteredCandies[indexPath.row]
+		} else {
+			candy = candies[indexPath.row]
+		}
 		cell.textLabel!.text = candy.name
 		cell.detailTextLabel!.text = candy.category
 		return cell
 	}
+
 
 	// MARK: - Private instance methods
 
@@ -114,12 +124,23 @@ class MasterViewController: UIViewController, UITableViewDataSource, UITableView
 		tableView.reloadData()
 	}
 
+	func isFiltering() -> Bool {
+		return searchController.isActive && !searchBarIsEmpty()
+	}
+
+
 
 	// MARK: - Segues
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "showDetail" {
 			if let indexPath = tableView.indexPathForSelectedRow {
-				let candy = candies[indexPath.row]
+				let candy: Candy
+				if isFiltering() {
+					candy = filteredCandies[indexPath.row]
+				} else {
+					candy = candies[indexPath.row]
+				}
+
 				let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
 				controller.detailCandy = candy
 				controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
