@@ -43,6 +43,11 @@ class MasterViewController: UIViewController, UITableViewDataSource, UITableView
 		navigationItem.searchController = searchController
 		definesPresentationContext = true
 
+		// Setup the Scope Bar
+		searchController.searchBar.scopeButtonTitles = ["All", "Chocolate", "Hard", "Other"]
+		searchController.searchBar.delegate = self
+
+
 		candies = [
 			Candy(category:"Chocolate", name:"Chocolate Bar"),
 			Candy(category:"Chocolate", name:"Chocolate Chip"),
@@ -161,9 +166,11 @@ class MasterViewController: UIViewController, UITableViewDataSource, UITableView
 extension MasterViewController: UISearchResultsUpdating {
 	// MARK: - UISearchResultsUpdating Delegate
 	func updateSearchResults(for searchController: UISearchController) {
-		filterContentForSearchText(searchController.searchBar.text!)
-
+		let searchBar = searchController.searchBar
+		let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
+		filterContentForSearchText(searchController.searchBar.text!, scope: scope)
 	}
+
 }
 
 extension MasterViewController: UISearchBarDelegate {
